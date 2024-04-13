@@ -51,6 +51,11 @@ public class PlayerMotor : NetworkBehaviour
     void Movement()
     {
         CheckGround();
+        animator.SetBool("Moving",moveInput != Vector2.zero);
+
+        animator.SetFloat("Horizontal", moveInput.x, 0.2f, Time.fixedDeltaTime);
+        animator.SetFloat("Vertical", moveInput.y, 0.2f, Time.fixedDeltaTime);
+        
 
         if (stamina <= 0)
             sprinting = false;
@@ -144,7 +149,6 @@ public class PlayerMotor : NetworkBehaviour
     public void MoveInput(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        animator.SetFloat("Horizontal", moveInput.x);
-        animator.SetFloat("Vertical", moveInput.y);
+
     }
 }
