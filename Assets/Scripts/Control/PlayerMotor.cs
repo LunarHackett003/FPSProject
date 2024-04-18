@@ -3,6 +3,7 @@ using FishNet.Object;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 
 public class PlayerMotor : NetworkBehaviour
@@ -38,11 +39,21 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] bool jumpBlocked, doubleJumped;
 
     [SerializeField] Renderer bodyRenderer;
+    
+    [SerializeField, Tooltip("For local players, the weight on this will be set to 1 to make sure everything lines up correctly")] MultiRotationConstraint highestSpineConstraint;
+    [SerializeField, Tooltip("The hand constraint - when a weapon is equipped, the weight for this will be set to 1")] 
     public override void OnStartClient()
     {
         base.OnStartClient();
         if (IsOwner)
+        {
             bodyRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            highestSpineConstraint.weight = 1;
+        }
+        else
+        {
+            highestSpineConstraint.weight = 0.6f;
+        }
     }
     private void Start()
     {
@@ -52,6 +63,8 @@ public class PlayerMotor : NetworkBehaviour
     {
         if(IsOwner)
         Movement();
+
+
     }
     void Movement()
     {
