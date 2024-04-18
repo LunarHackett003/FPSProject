@@ -1,3 +1,4 @@
+using FishNet.Component.Animating;
 using FishNet.Object;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,12 +7,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMotor : NetworkBehaviour
 {
-    [SerializeField] CharacterController controller;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] NetworkAnimator netAnim;
     [SerializeField] float groundMoveSpeed, airMoveForce;
     [SerializeField] Vector2 moveInput;
     [SerializeField] float groundedDrag, airDrag;
 
-    [SerializeField] Vector3 velocity;
     [SerializeField] float lookAngle;
     [SerializeField] Vector2 lookSpeed;
     [SerializeField] bool freeLooking;
@@ -32,13 +33,17 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] float sprintMultiplier, tacSprintBoost, tacSprintTime, maxTacSprintTime;
 
     [SerializeField] Animator animator;
+    
+    [SerializeField] float jumpCooldown, jumpForce, verticalVelocityScalar;
+    [SerializeField] bool jumpBlocked, doubleJumped;
 
-    [SerializeField, Header("Stamina")] float stamina;
-    [SerializeField] float maximumStamina, staminaRegenRate, staminaPerSecSprint, staminaPerJump, minStaminaJumpForce, maxStaminaJumpForce;
-    [SerializeField] float jumpCooldown;
-    [SerializeField] bool jumpBlocked;
-
-
+    [SerializeField] Renderer bodyRenderer;
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (IsOwner)
+            bodyRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+    }
     private void Start()
     {
         flAimTargStartPos = freeLookAimTarget.localPosition;
@@ -53,49 +58,42 @@ public class PlayerMotor : NetworkBehaviour
         CheckGround();
         animator.SetBool("Moving",moveInput != Vector2.zero);
 
-        animator.SetFloat("Horizontal", moveInput.x, 0.2f, Time.fixedDeltaTime);
-        animator.SetFloat("Vertical", moveInput.y, 0.2f, Time.fixedDeltaTime);
-        
+        animator.SetFloat("Horizontal", moveInput.x, 0.1f, Time.smoothDeltaTime);
+        animator.SetFloat("Vertical", moveInput.y, 0.1f, Time.smoothDeltaTime);
 
-        if (stamina <= 0)
-            sprinting = false;
-        stamina = Mathf.Clamp(stamina + ((sprinting && moveInput != Vector2.zero) ? -staminaPerSecSprint : staminaRegenRate) * Time.fixedDeltaTime, 0, maximumStamina);
+        rb.drag = grounded ? groundedDrag : airDrag;
 
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y)
             * (grounded ?  (groundMoveSpeed * (sprinting ? (tacSprinting ? sprintMultiplier + tacSprintBoost : sprintMultiplier) : 1))
             : airMoveForce);
         if (grounded)
             move = Vector3.ProjectOnPlane(move, groundNormal);
-        if (grounded)
-            controller.Move(transform.rotation * move * Time.fixedDeltaTime);
-        else
-            velocity += Time.fixedDeltaTime * (transform.rotation *  move);
-        velocity /= Mathf.Max(grounded ? groundedDrag : airDrag, 1.01f);
-        controller.Move(velocity * Time.fixedDeltaTime);
+        rb.AddRelativeForce(move);
     }
     void CheckGround()
     {
+        bool oldGrounded = grounded;
         grounded = Physics.SphereCast(transform.position, groundCheckRadius, -transform.up, out RaycastHit hit, groundCheckDistance, groundCheckLayermask) && Vector3.Dot(hit.normal, transform.up) > walkableDotThreshold;
+        groundNormal = grounded ? hit.normal : transform.up;
         if (grounded)
         {
-            groundNormal = hit.normal;
-            if(velocity.y < 0)
-                velocity.y = -groundMoveSpeed * groundedDrag;
-        }
-        else
-        {
-            velocity += Physics.gravity * Time.fixedDeltaTime;
+            doubleJumped = false;
+            //We've also just landed, check if we've just jumped
+            if(!jumpBlocked && !oldGrounded)
+                netAnim.SetTrigger("Landing");
         }
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && grounded && stamina > 0 && !jumpBlocked)
+        if (context.performed && ((grounded && !jumpBlocked) || (!grounded && !doubleJumped)))
         {
-        stamina -= staminaPerJump;
+            if (!grounded)
+                doubleJumped = true;
+            if (grounded)
+                netAnim.SetTrigger("Jump");
+            netAnim.ResetTrigger("Landing");
             StartCoroutine(JumpCD());
-            velocity = transform.up
-                       * Mathf.Lerp(minStaminaJumpForce, maxStaminaJumpForce, Mathf.InverseLerp(0, maximumStamina, stamina))
-                       + (transform.rotation * (groundMoveSpeed * new Vector3(moveInput.x, 0, moveInput.y)));
+            rb.AddForce((transform.up * jumpForce) + (Mathf.Abs(Mathf.Min(rb.velocity.y, 0)) * verticalVelocityScalar * transform.up), ForceMode.Impulse);
         }
     }
     public void LookInput(InputAction.CallbackContext context)
