@@ -4,34 +4,54 @@ using FishNet.Object.Synchronizing;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Eclipse.Weapons.Attachments;
 
-public class Weapon : NetworkBehaviour
+namespace Eclipse.Weapons
 {
-    public readonly SyncVar<bool> fireInput = new(new SyncTypeSettings(ReadPermission.ExcludeOwner));
-    bool fired;
+    public class Weapon : NetworkBehaviour
+    {
+        public readonly SyncVar<bool> fireInput = new(new SyncTypeSettings(ReadPermission.ExcludeOwner));
+        bool fired;
+        [SerializeField] AttachmentManager attachmentManager;
 
-    [ServerRpc(RunLocally = true)]
-    public void SetFireInput(bool fireInput)
-    {
-        this.fireInput.Value = fireInput;
-    }
-    
-    private void FixedUpdate()
-    {
-        WeaponEval();
-    }
-    [Server(Logging = FishNet.Managing.Logging.LoggingType.Common)]
-    void WeaponEval()
-    {
-        if (fireInput.Value)
+        [SerializeField] internal Transform aimPoint, gripPoint;
+        private void Awake()
         {
-            print("This weapon should fire!");
+            if(!attachmentManager)
+                attachmentManager = GetComponent<AttachmentManager>();
+            attachmentManager.SpawnAttachments();
         }
+        [ServerRpc(RunLocally = true)]
+        public void SetFireInput(bool fireInput)
+        {
+            this.fireInput.Value = fireInput;
+        }
+
+        private void FixedUpdate()
+        {
+            WeaponEval();
+        }
+        [Server(Logging = FishNet.Managing.Logging.LoggingType.Common)]
+        void WeaponEval()
+        {
+            if (fireInput.Value)
+            {
+                if (!fired)
+                {
+                    print("This weapon should fire!");
+                    fired = true;
+                }
+            }
+            else
+            {
+                fired = false;
+            }
+        }
+        [ServerRpc()]
+        public void UseWeapon()
+        {
+            print("Fired a weapon!");
+        }
+
     }
-    [ServerRpc()]
-    public void UseWeapon()
-    {
-        print("Fired a weapon!");
-    }
-    
 }

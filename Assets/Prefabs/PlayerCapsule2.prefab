@@ -1460,7 +1460,19 @@ MonoBehaviour:
     m_ActionId: df657fed-2eb6-4c2f-9e22-87c4a6b989f0
     m_ActionName: 'Player/Look[/Mouse/delta]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7259197372664162640}
+        m_TargetAssemblyTypeName: Eclipse.Weapons.WeaponManager, Assembly-CSharp
+        m_MethodName: GetFireInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 89772b77-799b-4360-9fd2-913477d06d1a
     m_ActionName: 'Player/Fire[/Mouse/leftButton]'
   - m_PersistentCalls:
@@ -1662,9 +1674,14 @@ MonoBehaviour:
   netAnimator: {fileID: 4777779648898531635}
   animator: {fileID: 5279510940842124091}
   weaponRoot: {fileID: 5490141462197293638}
-  spawnWeapon: {fileID: -6495579954540957700, guid: 92a2ddc6c32432a48a7bd805000440c8,
+  spawnWeapon: {fileID: 5309116053578448539, guid: 92a2ddc6c32432a48a7bd805000440c8,
     type: 3}
   currentWeapon: {fileID: 0}
+  stashedWeapon: {fileID: 0}
+  animationHelper: {fileID: 955305743875306764}
+  forwardHand: {fileID: 2901451026056909307}
+  forwardHandOriginalPosition: {x: 0, y: 0, z: 0}
+  forwardHandOriginalRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &5143897823971195464
 GameObject:
   m_ObjectHideFlags: 0
@@ -2900,6 +2917,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4777779648898531635}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8701b37487e0784a9debc9ecb38dbda,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 955305743875306764}
   m_SourcePrefab: {fileID: 100100000, guid: d8701b37487e0784a9debc9ecb38dbda, type: 3}
 --- !u!4 &72883344678290145 stripped
 Transform:
@@ -2974,6 +2995,19 @@ MonoBehaviour:
   _interpolation: 2
   _clientAuthoritative: 1
   _sendToOwner: 0
+--- !u!114 &955305743875306764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508542333944292347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3df7e1b6308974cb58503fb7b524e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forwardHandWeight: 0
 --- !u!4 &2280153942464870721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8701b37487e0784a9debc9ecb38dbda,
