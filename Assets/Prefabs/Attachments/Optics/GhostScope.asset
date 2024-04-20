@@ -18,3 +18,7 @@ MonoBehaviour:
     type: 3}
   posOffset: {x: 0, y: 0, z: 0}
   eulerOffset: {x: 0, y: 0, z: 0}
+  modifiedProperties:
+  - name: maxDamageRange
+    property: 10
+    amount: 1.1

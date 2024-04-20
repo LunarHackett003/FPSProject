@@ -1,3 +1,4 @@
+using Eclipse.Weapons;
 using FishNet.Component.Animating;
 using FishNet.Object;
 using System.Collections;
@@ -19,7 +20,7 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] bool freeLooking;
     [SerializeField] Vector2 freeLookPosDeviance;
     [SerializeField] float freeLookSpeed,freeLookSnapbackTime,freeLookMaxPosDeviance;
-    [SerializeField] Transform aimTransform, freeLookAimTarget;
+    [SerializeField] internal Transform aimTransform, freeLookAimTarget;
     Vector3 flAimTargStartPos;
     //Helps to turn the head properly by adding forward offset to the aim target
     [SerializeField] float freeLookMaxRearOffset;
@@ -34,9 +35,10 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] float sprintMultiplier, tacSprintBoost, tacSprintTime, maxTacSprintTime;
 
     [SerializeField] Animator animator;
-    
+    [SerializeField] WeaponManager wm;
     [SerializeField] float jumpCooldown, jumpForce, verticalVelocityScalar;
     [SerializeField] bool jumpBlocked, doubleJumped;
+    [SerializeField] Vector3 jumpLinearViewPunch, jumpAngularViewPunch;
 
     [SerializeField] Renderer bodyRenderer;
     
@@ -92,8 +94,11 @@ public class PlayerMotor : NetworkBehaviour
         {
             doubleJumped = false;
             //We've also just landed, check if we've just jumped
-            if(!jumpBlocked && !oldGrounded)
+            if (!jumpBlocked && !oldGrounded)
+            {
                 netAnim.SetTrigger("Landing");
+                wm.ReceiveShotNoSync(-jumpAngularViewPunch * Random.Range(.8f, 1.1f), jumpLinearViewPunch * Random.Range(0.8f, 1.1f));
+            }
         }
     }
     public void Jump(InputAction.CallbackContext context)
@@ -107,49 +112,19 @@ public class PlayerMotor : NetworkBehaviour
             netAnim.ResetTrigger("Landing");
             StartCoroutine(JumpCD());
             rb.AddForce((transform.up * jumpForce) + (Mathf.Abs(Mathf.Min(rb.velocity.y, 0)) * verticalVelocityScalar * transform.up), ForceMode.Impulse);
+            wm.ReceiveShotNoSync(jumpAngularViewPunch * Random.Range(.8f, 1.1f), jumpLinearViewPunch* Random.Range(0.8f, 1.1f));
         }
     }
     public void LookInput(InputAction.CallbackContext context)
     {
             Vector2 lookInput = context.ReadValue<Vector2>() * Time.smoothDeltaTime;
-        if (!freeLooking)
-        {
             lookInput *= lookSpeed;
             lookAngle = Mathf.Clamp(lookAngle + lookInput.y, -85f, 85f);
             transform.Rotate(transform.up, lookInput.x);
             aimTransform.localRotation = Quaternion.Euler(-lookAngle,0 ,0);
-        }
-        else
-        {
-            freeLookPosDeviance += lookInput * freeLookSpeed;
-            freeLookPosDeviance = Vector3.ClampMagnitude(freeLookPosDeviance, freeLookMaxPosDeviance);
-            UpdateAimTarget();
-        }
+
     }
-    void UpdateAimTarget()
-    {
-        freeLookAimTarget.localPosition = flAimTargStartPos + Vector3.Lerp(Vector3.zero, (Vector3.back * freeLookMaxRearOffset), Mathf.InverseLerp(0, freeLookMaxPosDeviance, freeLookPosDeviance.magnitude)) + (Vector3)freeLookPosDeviance;
-    }
-    public void FreeLookInput(InputAction.CallbackContext context)
-    {
-        freeLooking = context.performed || context.started;
-        
-        if(!freeLooking)
-            StartCoroutine(FreeLookSnapback());
-        else
-            StopCoroutine(FreeLookSnapback());
-    }
-    IEnumerator FreeLookSnapback()
-    {
-        float time = 0;
-        while (time < freeLookSnapbackTime)
-        {
-            time += Time.fixedDeltaTime;
-            freeLookPosDeviance = Vector3.Lerp(freeLookPosDeviance, Vector3.zero, Mathf.InverseLerp(0, freeLookSnapbackTime, time));
-            UpdateAimTarget();
-            yield return new WaitForFixedUpdate();
-        }
-    }
+
     IEnumerator JumpCD()
     {
         jumpBlocked = true;
@@ -160,6 +135,6 @@ public class PlayerMotor : NetworkBehaviour
     public void MoveInput(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-
     }
+    
 }

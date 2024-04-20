@@ -60,6 +60,7 @@ namespace Eclipse.Weapons.Attachments
                             aimPoint.position = item.currentAttachmentObject.transform.Find("AimPoint").position;
                             break;
                         case AttachmentData.AttachmentType.underbarrel:
+                            
                             break;
                         case AttachmentData.AttachmentType.muzzle:
                             break;

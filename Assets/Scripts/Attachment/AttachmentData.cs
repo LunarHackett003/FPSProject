@@ -36,5 +36,14 @@ namespace Eclipse.Weapons.Attachments
         public AttachmentType attachmentType;
         public GameObject attachmentPrefab;
         public Vector3 posOffset, eulerOffset;
+        public List<Weapon.WeaponProperty> modifiedProperties;
+        private void OnValidate()
+        {
+            for (int i = 0; i < modifiedProperties.Count; i++)
+            {
+                if (string.IsNullOrEmpty(modifiedProperties[i].name) || modifiedProperties[i].name.ToLower() == "none")
+                    modifiedProperties[i].name = System.Enum.GetName(typeof(Weapon.WeaponProperty.PropertyType), modifiedProperties[i].property);
+            }
+        }
     }
 }
