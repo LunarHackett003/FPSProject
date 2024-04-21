@@ -66,7 +66,10 @@ public class PlayerMotor : NetworkBehaviour
         if(IsOwner)
         Movement();
 
-
+    }
+    private void LateUpdate()
+    {
+            aimTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-lookAngle - wm.recoilAngleAdditive, -86f, 86f),0 ,0);
     }
     void Movement()
     {
@@ -97,7 +100,6 @@ public class PlayerMotor : NetworkBehaviour
             if (!jumpBlocked && !oldGrounded)
             {
                 netAnim.SetTrigger("Landing");
-                wm.ReceiveShotNoSync(-jumpAngularViewPunch * Random.Range(.8f, 1.1f), jumpLinearViewPunch * Random.Range(0.8f, 1.1f));
             }
         }
     }
@@ -112,7 +114,6 @@ public class PlayerMotor : NetworkBehaviour
             netAnim.ResetTrigger("Landing");
             StartCoroutine(JumpCD());
             rb.AddForce((transform.up * jumpForce) + (Mathf.Abs(Mathf.Min(rb.velocity.y, 0)) * verticalVelocityScalar * transform.up), ForceMode.Impulse);
-            wm.ReceiveShotNoSync(jumpAngularViewPunch * Random.Range(.8f, 1.1f), jumpLinearViewPunch* Random.Range(0.8f, 1.1f));
         }
     }
     public void LookInput(InputAction.CallbackContext context)
@@ -121,7 +122,6 @@ public class PlayerMotor : NetworkBehaviour
             lookInput *= lookSpeed;
             lookAngle = Mathf.Clamp(lookAngle + lookInput.y, -85f, 85f);
             transform.Rotate(transform.up, lookInput.x);
-            aimTransform.localRotation = Quaternion.Euler(-lookAngle,0 ,0);
 
     }
 

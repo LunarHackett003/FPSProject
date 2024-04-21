@@ -42,9 +42,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FreeLook",
+                    "name": "Aim",
                     "type": "Button",
-                    "id": "c96e0e32-97b5-4ee6-aefa-437ab5a6670b",
+                    "id": "6d45b935-14ce-4753-88e4-1a8b3870b7b5",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -296,12 +296,23 @@
                 },
                 {
                     "name": "",
-                    "id": "7f3d51ab-83dc-4424-b8a8-90a506b019d2",
-                    "path": "<Keyboard>/leftAlt",
+                    "id": "bd7ddad9-ae6a-441f-8f03-7212245d085a",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41c71761-b075-4615-acc3-36f271ac3ad3",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "FreeLook",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

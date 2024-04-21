@@ -431,7 +431,6 @@ GameObject:
   - component: {fileID: 2770069770999240012}
   - component: {fileID: 8977812870644111110}
   - component: {fileID: 6762583775485485025}
-  - component: {fileID: 7692749243988910315}
   m_Layer: 7
   m_Name: VMCameraPos
   m_TagString: Untagged
@@ -528,31 +527,6 @@ MonoBehaviour:
   AmplitudeGain: 0.56
   FrequencyGain: 0.93
   mNoiseOffsets: {x: 513.60675, y: 499.3255, z: 294.29697}
---- !u!895512359 &7692749243988910315
-AimConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918226413733912458}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Weight: 1
-  m_RotationAtRest: {x: -3.4415267, y: 0, z: 0}
-  m_RotationOffset: {x: 0, y: 0, z: -180}
-  m_AimVector: {x: 0, y: -0.00197, z: 1}
-  m_UpVector: {x: 0, y: -1, z: 0}
-  m_WorldUpVector: {x: 0, y: 1, z: 0}
-  m_WorldUpObject: {fileID: 6376748315732507971}
-  m_UpType: 2
-  m_AffectRotationX: 1
-  m_AffectRotationY: 1
-  m_AffectRotationZ: 1
-  m_Active: 1
-  m_IsLocked: 1
-  m_Sources:
-  - sourceTransform: {fileID: 6376748315732507971}
-    weight: 1
 --- !u!1 &2257115242196072582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1578,9 +1552,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6128776287541312921}
-        m_TargetAssemblyTypeName: PlayerMotor, Assembly-CSharp
-        m_MethodName: FreeLookInput
+      - m_Target: {fileID: 7259197372664162640}
+        m_TargetAssemblyTypeName: Eclipse.Weapons.WeaponManager, Assembly-CSharp
+        m_MethodName: GetAimInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1590,8 +1564,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: c96e0e32-97b5-4ee6-aefa-437ab5a6670b
-    m_ActionName: 'Player/FreeLook[/Keyboard/leftAlt]'
+    m_ActionId: 6d45b935-14ce-4753-88e4-1a8b3870b7b5
+    m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1733,13 +1707,19 @@ MonoBehaviour:
   forwardHandOriginalRotation: {x: 0, y: 0, z: 0, w: 0}
   recoilPositionTransform: {fileID: 9113911463892881737}
   recoilAngularTarget: {fileID: 6376748315732507971}
-  viewmodelCamera: {fileID: 3303921346958097045}
-  viewRecoilPosMultiplier: 0
-  weaponRecoilRotMultiplier: 1.2
-  viewmodelRollMultiplier: -7
+  viewCamTarget: {fileID: 1684553577521158348}
+  worldCamTarget: {fileID: 2435220558903901097}
+  viewRecoilPosMultiplier: -0.4
+  viewRecoilRotMultiplier: 0
   recoilpos: {x: 0, y: 0, z: 0}
   recoilRot: {x: 0, y: 0, z: 0}
-  recoilSmoothness: 0.1
+  recoilSmoothness: 0.02
+  recoilProfile: {fileID: 0}
+  recoilReturnTime: 0
+  currentRecoilReturn: 0
+  aiming: 0
+  worldCamera: {fileID: 8755302985752590876}
+  viewCamera: {fileID: 2770069770999240012}
 --- !u!1 &5143897823971195464
 GameObject:
   m_ObjectHideFlags: 0
@@ -2546,7 +2526,6 @@ GameObject:
   - component: {fileID: 8755302985752590876}
   - component: {fileID: 7442949790657892203}
   - component: {fileID: 1071135039595717922}
-  - component: {fileID: 7607835628793213520}
   m_Layer: 0
   m_Name: CameraPos
   m_TagString: Untagged
@@ -2643,31 +2622,6 @@ MonoBehaviour:
   AmplitudeGain: 0.2
   FrequencyGain: 0.5
   mNoiseOffsets: {x: 513.60675, y: 499.3255, z: 294.29697}
---- !u!895512359 &7607835628793213520
-AimConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8801501176876684788}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Weight: 1
-  m_RotationAtRest: {x: -3.4415267, y: 0, z: 0}
-  m_RotationOffset: {x: 0, y: 0, z: -180}
-  m_AimVector: {x: 0, y: -0.00197, z: 1}
-  m_UpVector: {x: 0, y: -1, z: 0}
-  m_WorldUpVector: {x: 0, y: 1, z: 0}
-  m_WorldUpObject: {fileID: 6376748315732507971}
-  m_UpType: 2
-  m_AffectRotationX: 1
-  m_AffectRotationY: 1
-  m_AffectRotationZ: 1
-  m_Active: 1
-  m_IsLocked: 1
-  m_Sources:
-  - sourceTransform: {fileID: 6376748315732507971}
-    weight: 1
 --- !u!1 &8939707900020861282
 GameObject:
   m_ObjectHideFlags: 0

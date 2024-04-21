@@ -70,7 +70,7 @@ namespace Eclipse.Weapons
         public List<WeaponProperty> properties = new();
 
         public readonly SyncVar<bool> fireInput = new(new SyncTypeSettings(ReadPermission.ExcludeOwner));
-        bool fired;
+        internal bool fired;
         [SerializeField] AttachmentManager attachmentManager;
 
         [SerializeField] internal Transform aimPoint, gripPoint;
@@ -82,11 +82,8 @@ namespace Eclipse.Weapons
         [SerializeField] float shotCooldown, burstCooldown;
         float currentCooldown;
         [SerializeField] bool autoBurst;
+        [SerializeField] internal bool recoiling;
 
-
-        [SerializeField] Vector3 linearRecoilMax, angularRecoilMax;
-        [SerializeField] float rearRecoilVariance;
-        [SerializeField] internal float recoilRecoverSpeed;
         internal float currentSpread;
         [SerializeField] AnimationCurve spreadRamp;
         [SerializeField] float spreadRadiusAtMax;
@@ -95,7 +92,12 @@ namespace Eclipse.Weapons
         [SerializeField] internal float aimAmount, aimSpeed, aimRecoilModifier;
         [SerializeField] internal AnimationCurve aimCurve;
         WeaponManager wmParent;
+
         
+        [SerializeField, Tooltip("This weapons Recoil Profile scriptable object")] internal RecoilProfile recoilProfile;
+        [SerializeField, Tooltip("How strong the per-shot recoil is")] internal float recoilPerShot;
+        [SerializeField] internal MobilityProfile mobilityProfile;
+
         private void Awake()
         {
             if(!attachmentManager)
@@ -121,6 +123,8 @@ namespace Eclipse.Weapons
                     }
                 }
             }
+
+            wmParent.recoilProfile = recoilProfile;
         }
         [ServerRpc(RunLocally = true)]
         public void SetFireInput(bool fireInput)
@@ -165,24 +169,7 @@ namespace Eclipse.Weapons
                 muzzleParticle.Play();
             if (wmParent)
             {
-                float aimMod = Mathf.Lerp(1, aimRecoilModifier, aimAmount);
-                Vector3 linearrecoilvec = new Vector3()
-                {
-                    //X and Y linear recoil are aligned with the view plane, need to move on all directions
-                    x = Random.Range(-linearRecoilMax.x, linearRecoilMax.x),
-                    y = Random.Range(linearRecoilMax.y / 2, linearRecoilMax.y),
-                    //Z recoil is aligned with the view direction, and needs to come backwards.
-                    z = -Random.Range(linearRecoilMax.z*(1-rearRecoilVariance), linearRecoilMax.z*(1+rearRecoilVariance)),
-                } * aimMod;
-                Vector3 angularrecoilvec = new Vector3()
-                {
-                    //X recoil is pitch, y is yaw, z is roll
-                    //X recoil only needs to pitch the gun upwards, while the other two need positive and negative
-                    x = Random.Range(-angularRecoilMax.x, angularRecoilMax.x),
-                    y = angularRecoilMax.y,
-                    z = Random.Range(-angularRecoilMax.z, angularRecoilMax.z),
-                } * aimMod;
-                wmParent.ReceiveShot(angularrecoilvec, linearrecoilvec);
+                wmParent.ReceiveRecoilImpulse();
             }
         }
         /// <summary>

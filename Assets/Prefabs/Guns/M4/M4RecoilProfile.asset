@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c892fe95d3f4b12448fc6630602788ca, type: 3}
+  m_Name: M4RecoilProfile
+  m_EditorClassIdentifier: 
+  recoverSpeed: 2
+  recoilPerShot: {x: 0, y: 0, z: 0}
+  firingRecoilReturnSpeed: 90
+  idleRecoilReturnSpeed: 2
+  recoilIdleTime: 0.05
+  recoilReturnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0
+      value: 0.008919358
+      inSlope: 7.4851656
+      outSlope: 7.4851656
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.15613967
+    - serializedVersion: 3
+      time: 0.43114102
+      value: 1.0142994
+      inSlope: -1.9955238
+      outSlope: -1.9955238
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.41581324
+      outWeight: 0.5063267
+    - serializedVersion: 3
+      time: 0.81546664
+      value: 0.99903345
+      inSlope: 0.27931502
+      outSlope: 0.27931502
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13553506
+      outWeight: 0.30870667
+    - serializedVersion: 3
+      time: 1
+      value: 0.9963598
+      inSlope: 0.5149004
+      outSlope: 0.5149004
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.31905833
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  aimedRecoilMultiplier: 0.8
