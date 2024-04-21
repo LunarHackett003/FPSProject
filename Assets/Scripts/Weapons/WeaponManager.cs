@@ -27,7 +27,7 @@ namespace Eclipse.Weapons
         float viewRoll;
         [SerializeField] Transform recoilPositionTransform, recoilAngularTarget;
         [SerializeField] Transform viewCamTarget, worldCamTarget;
-        [SerializeField] float viewRecoilPosMultiplier, viewRecoilRotMultiplier;
+        [SerializeField] float viewRecoilPosMultiplier, viewRecoilRotMultiplier, weaponRecoilPosMultiplier, weaponRecoilRotMultiplier;
         [SerializeField] Vector3 recoilpos, recoilRot;
         private Vector3 posVelocity, rotVelocity;
         private float sds;
@@ -38,11 +38,17 @@ namespace Eclipse.Weapons
         [SerializeField] float recoilReturnTime;
         [SerializeField] float currentRecoilReturn;
         Vector3 peakRecoilPosition;
+        internal Vector3 recoilAimRotation, peakRecoilAimRotation;
+        internal Vector3 aimRotationDamped;
+        Vector3 aimRotationVelocity;
+        [SerializeField] float aimRotationSmoothness;
         [SerializeField] bool aiming;
         [SerializeField] CinemachineCamera worldCamera, viewCamera;
+        [SerializeField] float worldDefaultFOV = 70, viewDefaultFOV = 50;
         private void Awake()
         {
-            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         public override void OnStartClient()
         {
@@ -81,10 +87,12 @@ namespace Eclipse.Weapons
             {
 
                 currentWeapon.aimAmount = Mathf.MoveTowards(currentWeapon.aimAmount, aiming ? 1 : 0, currentWeapon.mobilityProfile.aimSpeed * Time.fixedDeltaTime);
-
+                float aimLerp = currentWeapon.mobilityProfile.aimCurve.Evaluate(currentWeapon.aimAmount);
                 viewCamTarget.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position + (weaponRoot.TransformDirection(recoilpos) * viewRecoilPosMultiplier), currentWeapon.aimAmount),
-                    Quaternion.Lerp(viewCamTarget.rotation, currentWeapon.aimPoint.rotation, currentWeapon.aimAmount));
+                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position + (weaponRoot.TransformDirection(recoilpos) * viewRecoilPosMultiplier), aimLerp),
+                    Quaternion.Lerp(viewCamTarget.rotation, currentWeapon.aimPoint.rotation, currentWeapon.aimAmount) * Quaternion.Euler(recoilAimRotation * viewRecoilRotMultiplier));
+                worldCamera.Lens.FieldOfView = Mathf.Lerp(worldDefaultFOV, currentWeapon.mobilityProfile.worldAimFOV, aimLerp);
+                viewCamera.Lens.FieldOfView = Mathf.Lerp(viewDefaultFOV, currentWeapon.mobilityProfile.viewAimFOV, aimLerp);
             }
         }
         void RecoilCalculations()
@@ -100,10 +108,12 @@ namespace Eclipse.Weapons
                 {
                     recoilReturnTime += Time.fixedDeltaTime;
                     peakRecoilPosition = recoilPositionTransform.localPosition;
+                    peakRecoilAimRotation = recoilAimRotation;
                     currentRecoilReturn = 0;
 
                     recoilRot -= recoverSpeed * recoilRot;
                     recoilpos -= recoverSpeed * recoilpos;
+                    recoilAimRotation -= recoverSpeed * recoilAimRotation;
                 }
                 else
                 {
@@ -111,10 +121,13 @@ namespace Eclipse.Weapons
                     {
                         currentRecoilReturn += Time.fixedDeltaTime * recoilProfile.idleRecoilReturnSpeed;
                         recoilpos = Vector3.LerpUnclamped(peakRecoilPosition, Vector3.zero, recoilProfile.recoilReturnCurve.Evaluate(currentRecoilReturn));
+                        recoilAimRotation = Vector3.LerpUnclamped(peakRecoilAimRotation, Vector3.zero, recoilProfile.recoilViewReturnCurve.Evaluate(currentRecoilReturn));
                     }
                 }
-                recoilPositionTransform.SetLocalPositionAndRotation(Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, recoilSmoothness),
-    Quaternion.identity);
+                aimRotationDamped = Vector3.SmoothDamp(aimRotationDamped, recoilAimRotation, ref aimRotationVelocity, aimRotationSmoothness);
+                recoilPositionTransform.SetLocalPositionAndRotation(Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, recoilSmoothness) * weaponRecoilPosMultiplier,
+                Quaternion.Euler(aimRotationDamped * weaponRecoilRotMultiplier));
+                
             }
         }
 
@@ -142,10 +155,17 @@ namespace Eclipse.Weapons
         }
         internal void ReceiveRecoilImpulse()
         {
+            float aimLerp = Mathf.Lerp(1, currentWeapon.recoilProfile.aimedRecoilMultiplier, currentWeapon.aimAmount);
             recoilpos += new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
-                Random.Range(-recoilProfile.recoilPerShot.y, recoilProfile.recoilPerShot.y), 
-                recoilProfile.recoilPerShot.z) *Mathf.Lerp(1, currentWeapon.recoilProfile.aimedRecoilMultiplier, currentWeapon.aimAmount);
+                Random.Range(-recoilProfile.recoilPerShot.y, recoilProfile.recoilPerShot.y),
+                recoilProfile.recoilPerShot.z) * aimLerp;
             recoilReturnTime = 0;
+            recoilAimRotation += new Vector3()
+            {
+                x = currentWeapon.recoilProfile.aimRotationPerShot.x,
+                y = Random.Range(-currentWeapon.recoilProfile.aimRotationPerShot.y, currentWeapon.recoilProfile.aimRotationPerShot.y),
+                z = Random.Range(-currentWeapon.recoilProfile.aimRotationPerShot.z, currentWeapon.recoilProfile.aimRotationPerShot.z),
+            } * aimLerp;
         }
     }
 }

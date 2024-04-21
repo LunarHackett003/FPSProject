@@ -10,7 +10,8 @@ namespace Eclipse.Weapons
         public Vector3 recoilPerShot;
         public float firingRecoilReturnSpeed, idleRecoilReturnSpeed;
         public float recoilIdleTime;
-        public AnimationCurve recoilReturnCurve;
+        public AnimationCurve recoilReturnCurve, recoilViewReturnCurve;
         public float aimedRecoilMultiplier;
+        public Vector3 aimRotationPerShot;
     }
 }

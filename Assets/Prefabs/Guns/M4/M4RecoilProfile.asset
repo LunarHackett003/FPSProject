@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c892fe95d3f4b12448fc6630602788ca, type: 3}
   m_Name: M4RecoilProfile
   m_EditorClassIdentifier: 
-  recoverSpeed: 2
-  recoilPerShot: {x: 0, y: 0, z: 0}
+  recoverSpeed: 1.5
+  recoilPerShot: {x: 0.003, y: 0.003, z: -0.03}
   firingRecoilReturnSpeed: 90
-  idleRecoilReturnSpeed: 2
+  idleRecoilReturnSpeed: 3
   recoilIdleTime: 0.05
   recoilReturnCurve:
     serializedVersion: 2
@@ -39,8 +39,8 @@ MonoBehaviour:
       inWeight: 0.41581324
       outWeight: 0.5063267
     - serializedVersion: 3
-      time: 0.81546664
-      value: 0.99903345
+      time: 0.9148297
+      value: 0.9913206
       inSlope: 0.27931502
       outSlope: 0.27931502
       tangentMode: 0
@@ -50,13 +50,47 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.9963598
-      inSlope: 0.5149004
-      outSlope: 0.5149004
+      inSlope: -0.0681635
+      outSlope: -0.0681635
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.31905833
+      inWeight: 0.39348686
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  aimedRecoilMultiplier: 0.8
+  recoilViewReturnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0
+      outWeight: 0.40052763
+    - serializedVersion: 3
+      time: 0.56617004
+      value: 0.973636
+      inSlope: 1.2795573
+      outSlope: 1.2795573
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.406148
+      outWeight: 0.25045964
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.0053131916
+      outSlope: 0.0053131916
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.50799227
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  aimedRecoilMultiplier: 0.75
+  aimRotationPerShot: {x: 0.8, y: 0.3, z: 1}

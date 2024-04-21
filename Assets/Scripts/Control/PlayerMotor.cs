@@ -69,7 +69,7 @@ public class PlayerMotor : NetworkBehaviour
     }
     private void LateUpdate()
     {
-            aimTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-lookAngle - wm.recoilAngleAdditive, -86f, 86f),0 ,0);
+        aimTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-lookAngle - wm.aimRotationDamped.x, -89, 89), wm.aimRotationDamped.y, wm.aimRotationDamped.z);
     }
     void Movement()
     {

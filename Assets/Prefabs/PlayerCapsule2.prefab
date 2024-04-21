@@ -1710,16 +1710,21 @@ MonoBehaviour:
   viewCamTarget: {fileID: 1684553577521158348}
   worldCamTarget: {fileID: 2435220558903901097}
   viewRecoilPosMultiplier: -0.4
-  viewRecoilRotMultiplier: 0
+  viewRecoilRotMultiplier: -0.3
+  weaponRecoilPosMultiplier: 1
+  weaponRecoilRotMultiplier: -0.4
   recoilpos: {x: 0, y: 0, z: 0}
   recoilRot: {x: 0, y: 0, z: 0}
-  recoilSmoothness: 0.02
+  recoilSmoothness: 0.06
   recoilProfile: {fileID: 0}
   recoilReturnTime: 0
   currentRecoilReturn: 0
+  aimRotationSmoothness: 0.03
   aiming: 0
   worldCamera: {fileID: 8755302985752590876}
   viewCamera: {fileID: 2770069770999240012}
+  worldDefaultFOV: 70
+  viewDefaultFOV: 50
 --- !u!1 &5143897823971195464
 GameObject:
   m_ObjectHideFlags: 0
