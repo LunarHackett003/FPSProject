@@ -1,3 +1,5 @@
+using FishNet;
+using FishNet.Object;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +7,7 @@ using UnityEngine;
 
 namespace Eclipse.Weapons.Attachments
 {
-    public class AttachmentManager : MonoBehaviour
+    public class AttachmentManager : NetworkBehaviour
     {
         [System.Serializable]
         public class AttachPoint
@@ -25,6 +27,8 @@ namespace Eclipse.Weapons.Attachments
         public AttachPoint[] attachPoints;
         [Tooltip("This transform indicates where the player will aim.\nIf an optic is equipped, this transform will be moved to the optic's aim point")]
         public Transform aimPoint;
+        public Transform gripPoint;
+        public Weapon weapon;
         [SerializeField] Vector3 defaultAimPoint;
         internal void SpawnAttachments()
         {
@@ -60,9 +64,13 @@ namespace Eclipse.Weapons.Attachments
                             aimPoint.position = item.currentAttachmentObject.transform.Find("AimPoint").position;
                             break;
                         case AttachmentData.AttachmentType.underbarrel:
-                            
+                            Transform gp = item.currentAttachmentObject.transform.Find("GripPoint");
+                            gripPoint.SetPositionAndRotation(gp.position, gp.rotation);
                             break;
                         case AttachmentData.AttachmentType.muzzle:
+                            ParticleSystem ps = item.currentAttachmentObject.GetComponentInChildren<ParticleSystem>();
+                            if (ps)
+                                weapon.muzzleParticle = ps;
                             break;
                         case AttachmentData.AttachmentType.laser:
                             break;
@@ -80,17 +88,22 @@ namespace Eclipse.Weapons.Attachments
                     if (item.attachmentType == AttachmentData.AttachmentType.optic)
                         aimPoint.localPosition = defaultAimPoint;
                 }
-            }
-            foreach (var item in attachPoints)
-            {
-                if (!requiredMounts.Contains(item.partMount.transform))
+                ServerManager.Spawn(item.currentAttachmentObject, Owner);
+                if (IsOwner)
                 {
-                    item.partMount.SetActive(false);
+                    var renderers = GetComponentsInChildren<Renderer>();
+                    for (int i = 0; i < renderers.Length; i++)
+                    {
+                        renderers[i].gameObject.layer = LayerMask.NameToLayer("Character");
+
+                    }
+
                 }
             }
         }
-        private void OnValidate()
+        override protected void OnValidate()
         {
+            base.OnValidate();
             for (int i = 0; i < attachPoints.Length; i++)
             {
                 AttachPoint item = attachPoints[i];

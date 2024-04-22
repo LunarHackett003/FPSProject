@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Eclipse.Weapons.Attachments;
+using FishNet;
+using Unity.VisualScripting;
 
 namespace Eclipse.Weapons
 {
@@ -74,7 +76,7 @@ namespace Eclipse.Weapons
         [SerializeField] AttachmentManager attachmentManager;
 
         [SerializeField] internal Transform aimPoint, gripPoint;
-        [SerializeField] ParticleSystem muzzleParticle;
+        [SerializeField] internal ParticleSystem muzzleParticle;
         [SerializeField] bool delayBeforeShot;
 
         [SerializeField, Tooltip("How many rounds to fire before preventing the player from firing again")] int burstCount;
@@ -102,29 +104,56 @@ namespace Eclipse.Weapons
         {
             if(!attachmentManager)
                 attachmentManager = GetComponent<AttachmentManager>();
-            attachmentManager.SpawnAttachments();
-            wmParent = GetComponentInParent<WeaponManager>();
-
-            //Now that we've grabbed the Attachment Manager, we need to get all the attachments and then modify this weapon's properties based on the attachments properties
-            for (int i = 0; i < attachmentManager.attachPoints.Length; i++)
+        }
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (IsOwner)
             {
-                //Cache the one we're looking at
-                AttachmentManager.AttachPoint ap = attachmentManager.attachPoints[i];
-                //Check if the Current Attachment data container exists, otherwise we're likely using the default attachment, or one is not specified.
-                if (ap.currentAttachment)
+                attachmentManager.SpawnAttachments();
+                wmParent = GetComponentInParent<WeaponManager>();
+
+                //Now that we've grabbed the Attachment Manager, we need to get all the attachments and then modify this weapon's properties based on the attachments properties
+                for (int i = 0; i < attachmentManager.attachPoints.Length; i++)
                 {
-                    //Iterate through the properties this attachment modifies
-                    for (int j = 0; j < ap.currentAttachment.modifiedProperties.Count; j++)
+                    //Cache the one we're looking at
+                    AttachmentManager.AttachPoint ap = attachmentManager.attachPoints[i];
+                    //Check if the Current Attachment data container exists, otherwise we're likely using the default attachment, or one is not specified.
+                    if (ap.currentAttachment)
                     {
-                        //Cache the modified property 
-                        WeaponProperty mp = ap.currentAttachment.modifiedProperties[j];
-                        //Find the property that matches this one, then add the amount for the modifier.
-                        properties.Find(x => x.property == mp.property).amount *= mp.amount;
+                        //Iterate through the properties this attachment modifies
+                        for (int j = 0; j < ap.currentAttachment.modifiedProperties.Count; j++)
+                        {
+                            //Cache the modified property 
+                            WeaponProperty mp = ap.currentAttachment.modifiedProperties[j];
+                            //Find the property that matches this one, then add the amount for the modifier.
+                            properties.Find(x => x.property == mp.property).amount *= mp.amount;
+                        }
                     }
                 }
-            }
+                attachmentManager.weapon = this;
+                //Clone the recoil profile so we don't overwrite the original
+                recoilProfile = recoilProfile.Clone();
+                recoilProfile.name += "_CLONED";
 
-            wmParent.recoilProfile = recoilProfile;
+                // ASSIGN MODIFIED VALUES
+                // ASSIGN MODIFIED VALUES
+
+                //Assign the temp variable "prop" to each value if it needs modifying multiple times
+                float prop = properties.Find(x => x.property == WeaponProperty.PropertyType.recoilSmoothness).amount;
+                recoilProfile.viewRecoilSmoothness *= prop;
+                recoilProfile.weaponRecoilSmoothness *= prop;
+                prop = properties.Find(x => x.property == WeaponProperty.PropertyType.horizontalRecoil).amount;
+                recoilProfile.recoilPerShot.x *= prop;
+                recoilProfile.aimRotationPerShot.y *= prop;
+                prop = properties.Find(x => x.property == WeaponProperty.PropertyType.verticalRecoil).amount;
+                recoilProfile.recoilPerShot.y *= prop;
+                recoilProfile.aimRotationPerShot.x *= prop;
+                wmParent.recoilProfile = recoilProfile;
+                prop = properties.Find(x => x.property == WeaponProperty.PropertyType.recoilControl).amount;
+                recoilProfile.recoilPerShot *= prop;
+                recoilProfile.aimRotationPerShot *= prop;
+            }
         }
         [ServerRpc(RunLocally = true)]
         public void SetFireInput(bool fireInput)

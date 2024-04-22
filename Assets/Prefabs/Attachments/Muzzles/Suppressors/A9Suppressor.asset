@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b917fbc8812e741ab229b4236f32f9, type: 3}
+  m_Name: A9Suppressor
+  m_EditorClassIdentifier: 
+  requiresMount: 0
+  attachmentType: 3
+  attachmentPrefab: {fileID: 3458276430409258211, guid: 8d915af05b910614dbb277489348e143,
+    type: 3}
+  posOffset: {x: 0, y: 0, z: 0}
+  eulerOffset: {x: 0, y: 0, z: 0}
+  modifiedProperties:
+  - name: recoilSmoothness
+    property: 6
+    amount: 1.02
+  - name: recoilSmoothness
+    property: 5
+    amount: 0.9

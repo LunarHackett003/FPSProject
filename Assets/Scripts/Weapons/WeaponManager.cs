@@ -31,7 +31,6 @@ namespace Eclipse.Weapons
         [SerializeField] Vector3 recoilpos, recoilRot;
         private Vector3 posVelocity, rotVelocity;
         private float sds;
-        [SerializeField] float recoilSmoothness;
         [SerializeField] internal RecoilProfile recoilProfile;
         internal float recoilAngleAdditive;
 
@@ -41,7 +40,6 @@ namespace Eclipse.Weapons
         internal Vector3 recoilAimRotation, peakRecoilAimRotation;
         internal Vector3 aimRotationDamped;
         Vector3 aimRotationVelocity;
-        [SerializeField] float aimRotationSmoothness;
         [SerializeField] bool aiming;
         [SerializeField] CinemachineCamera worldCamera, viewCamera;
         [SerializeField] float worldDefaultFOV = 70, viewDefaultFOV = 50;
@@ -99,12 +97,10 @@ namespace Eclipse.Weapons
         {
             if (currentWeapon)
             {
-                float recoverSpeed = recoilProfile.recoverSpeed * Time.fixedDeltaTime;
-
+                float recoverSpeed = currentWeapon.recoilProfile.recoverSpeed * Time.fixedDeltaTime;
                 viewRoll = recoilRot.z;
 
-
-                if (recoilReturnTime < recoilProfile.recoilIdleTime)
+                if (recoilReturnTime < currentWeapon.recoilProfile.recoilIdleTime)
                 {
                     recoilReturnTime += Time.fixedDeltaTime;
                     peakRecoilPosition = recoilPositionTransform.localPosition;
@@ -119,13 +115,13 @@ namespace Eclipse.Weapons
                 {
                     if (currentRecoilReturn < 1)
                     {
-                        currentRecoilReturn += Time.fixedDeltaTime * recoilProfile.idleRecoilReturnSpeed;
-                        recoilpos = Vector3.LerpUnclamped(peakRecoilPosition, Vector3.zero, recoilProfile.recoilReturnCurve.Evaluate(currentRecoilReturn));
-                        recoilAimRotation = Vector3.LerpUnclamped(peakRecoilAimRotation, Vector3.zero, recoilProfile.recoilViewReturnCurve.Evaluate(currentRecoilReturn));
+                        currentRecoilReturn += Time.fixedDeltaTime * currentWeapon.recoilProfile.idleRecoilReturnSpeed;
+                        recoilpos = Vector3.LerpUnclamped(peakRecoilPosition, Vector3.zero, currentWeapon.recoilProfile.recoilReturnCurve.Evaluate(currentRecoilReturn));
+                        recoilAimRotation = Vector3.LerpUnclamped(peakRecoilAimRotation, Vector3.zero, currentWeapon.recoilProfile.recoilViewReturnCurve.Evaluate(currentRecoilReturn));
                     }
                 }
-                aimRotationDamped = Vector3.SmoothDamp(aimRotationDamped, recoilAimRotation, ref aimRotationVelocity, aimRotationSmoothness);
-                recoilPositionTransform.SetLocalPositionAndRotation(Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, recoilSmoothness) * weaponRecoilPosMultiplier,
+                aimRotationDamped = Vector3.SmoothDamp(aimRotationDamped, recoilAimRotation, ref aimRotationVelocity, currentWeapon.recoilProfile.viewRecoilSmoothness);
+                recoilPositionTransform.SetLocalPositionAndRotation(Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, currentWeapon.recoilProfile.weaponRecoilSmoothness) * weaponRecoilPosMultiplier,
                 Quaternion.Euler(aimRotationDamped * weaponRecoilRotMultiplier));
                 
             }
@@ -135,8 +131,6 @@ namespace Eclipse.Weapons
         {
             if (currentWeapon)
             {
-
-
                 forwardHand.SetLocalPositionAndRotation(forwardHandOriginalPosition, forwardHandOriginalRotation);
                 forwardHand.SetPositionAndRotation(Vector3.Lerp(forwardHand.position, currentWeapon.gripPoint.position, animationHelper.forwardHandWeight),
                     Quaternion.Lerp(forwardHand.rotation, currentWeapon.gripPoint.rotation, animationHelper.forwardHandWeight));

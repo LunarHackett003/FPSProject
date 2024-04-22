@@ -13,5 +13,27 @@ namespace Eclipse.Weapons
         public AnimationCurve recoilReturnCurve, recoilViewReturnCurve;
         public float aimedRecoilMultiplier;
         public Vector3 aimRotationPerShot;
+        public float weaponRecoilSmoothness, viewRecoilSmoothness;
+
+        public RecoilProfile()
+        {
+        }
+
+        public RecoilProfile(RecoilProfile profile)
+        {
+            recoverSpeed = profile.recoverSpeed;
+            recoilPerShot = profile.recoilPerShot;
+            firingRecoilReturnSpeed = profile.firingRecoilReturnSpeed;
+            idleRecoilReturnSpeed= profile.idleRecoilReturnSpeed;
+            recoilIdleTime = profile.recoilIdleTime;
+            recoilReturnCurve = profile.recoilReturnCurve;
+            recoilViewReturnCurve = profile.recoilViewReturnCurve;
+            aimedRecoilMultiplier = profile.aimedRecoilMultiplier;
+            aimRotationPerShot = profile.aimRotationPerShot;
+            weaponRecoilSmoothness = profile.weaponRecoilSmoothness;
+            viewRecoilSmoothness = profile.viewRecoilSmoothness;
+        }
+        
+
     }
 }
