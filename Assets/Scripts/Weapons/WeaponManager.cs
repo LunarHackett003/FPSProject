@@ -36,7 +36,7 @@ namespace Eclipse.Weapons
 
         [SerializeField] float recoilReturnTime;
         [SerializeField] float currentRecoilReturn;
-        Vector3 peakRecoilPosition;
+        Vector3 peakRecoilPosition, recoilPositionDamped;
         internal Vector3 recoilAimRotation, peakRecoilAimRotation;
         internal Vector3 aimRotationDamped;
         Vector3 aimRotationVelocity;
@@ -87,7 +87,7 @@ namespace Eclipse.Weapons
                 currentWeapon.aimAmount = Mathf.MoveTowards(currentWeapon.aimAmount, aiming ? 1 : 0, currentWeapon.mobilityProfile.aimSpeed * Time.fixedDeltaTime);
                 float aimLerp = currentWeapon.mobilityProfile.aimCurve.Evaluate(currentWeapon.aimAmount);
                 viewCamTarget.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position + (weaponRoot.TransformDirection(recoilpos) * viewRecoilPosMultiplier), aimLerp),
+                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position + (weaponRoot.TransformDirection(recoilPositionDamped) * viewRecoilPosMultiplier), aimLerp),
                     Quaternion.Lerp(viewCamTarget.rotation, currentWeapon.aimPoint.rotation, currentWeapon.aimAmount) * Quaternion.Euler(recoilAimRotation * viewRecoilRotMultiplier));
                 worldCamera.Lens.FieldOfView = Mathf.Lerp(worldDefaultFOV, currentWeapon.mobilityProfile.worldAimFOV, aimLerp);
                 viewCamera.Lens.FieldOfView = Mathf.Lerp(viewDefaultFOV, currentWeapon.mobilityProfile.viewAimFOV, aimLerp);
@@ -120,8 +120,9 @@ namespace Eclipse.Weapons
                         recoilAimRotation = Vector3.LerpUnclamped(peakRecoilAimRotation, Vector3.zero, currentWeapon.recoilProfile.recoilViewReturnCurve.Evaluate(currentRecoilReturn));
                     }
                 }
+                recoilPositionDamped = Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, currentWeapon.recoilProfile.weaponRecoilSmoothness) * weaponRecoilPosMultiplier;
                 aimRotationDamped = Vector3.SmoothDamp(aimRotationDamped, recoilAimRotation, ref aimRotationVelocity, currentWeapon.recoilProfile.viewRecoilSmoothness);
-                recoilPositionTransform.SetLocalPositionAndRotation(Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, currentWeapon.recoilProfile.weaponRecoilSmoothness) * weaponRecoilPosMultiplier,
+                recoilPositionTransform.SetLocalPositionAndRotation(recoilPositionDamped,
                 Quaternion.Euler(aimRotationDamped * weaponRecoilRotMultiplier));
                 
             }

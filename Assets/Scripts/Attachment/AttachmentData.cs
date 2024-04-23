@@ -31,6 +31,22 @@ namespace Eclipse.Weapons.Attachments
             /// Mounted on a rail, typically, and affects control and hip-fire targeting
             /// </summary>
             laser = 4,
+            /// <summary>
+            /// Held by the dominant hand, usually the right in this game.
+            /// </summary>
+            grip = 5,
+            /// <summary>
+            /// The part of the weapon that is placed against the shoulder
+            /// </summary>
+            stock = 6,
+            /// <summary>
+            /// Affects the fire rate and handling of some weapons
+            /// </summary>
+            trigger = 7,
+            /// <summary>
+            /// The ammo container on this weapon
+            /// </summary>
+            magazine = 8
         }
         public bool requiresMount;
         public AttachmentType attachmentType;

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeedMultiplier: 1
   sprintSpeedMultiplier: 1
-  aimSpeed: 4
+  aimSpeed: 3
   worldAimFOV: 60
-  viewAimFOV: 45
+  viewAimFOV: 25
   aimCurve:
     serializedVersion: 2
     m_Curve:

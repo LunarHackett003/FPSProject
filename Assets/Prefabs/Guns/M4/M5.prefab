@@ -62,6 +62,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1865095818422626848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4547663131319629709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 425291530453360303}
+  m_Layer: 0
+  m_Name: RearGripPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &425291530453360303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4547663131319629709}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9141879934824814934}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &4561423246184490850
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,6 +325,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -3535847154139593788, guid: a7f6e529b7b83d047af89ea71fcbede1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2941169739748184350, guid: a7f6e529b7b83d047af89ea71fcbede1,
         type: 3}
       propertyPath: m_Layer
@@ -425,7 +461,8 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -7233097784852694372, guid: a7f6e529b7b83d047af89ea71fcbede1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1048953910694265805, guid: a7f6e529b7b83d047af89ea71fcbede1,
         type: 3}
@@ -447,6 +484,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 366514873886462220}
+    - targetCorrespondingSourceObject: {fileID: 1048953910694265805, guid: a7f6e529b7b83d047af89ea71fcbede1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 425291530453360303}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a7f6e529b7b83d047af89ea71fcbede1,
         type: 3}
@@ -464,6 +505,12 @@ PrefabInstance:
 --- !u!1 &5704703023934008629 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4574518641493522350, guid: a7f6e529b7b83d047af89ea71fcbede1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8093207516830325403}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5996007234381309892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6672432952648319649, guid: a7f6e529b7b83d047af89ea71fcbede1,
     type: 3}
   m_PrefabInstance: {fileID: 8093207516830325403}
   m_PrefabAsset: {fileID: 0}
@@ -561,22 +608,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4106fea9f7f8b49bd1dfa7e63844c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 5309116053578448539}
+  _networkObjectCache: {fileID: 5309116053578448539}
   attachPoints:
   - attachmentType: 1
     point: {fileID: 1865095818422626848}
     partMount: {fileID: 3348496896272571775}
     defaultAttachment: {fileID: 0}
-    currentAttachment: {fileID: 11400000, guid: 6aa345e4fa0a53d45b9f2a8a73313eed,
-      type: 2}
+    currentAttachment: {fileID: 0}
     defaultAttachmentObject: {fileID: 5704703023934008629}
     currentAttachmentObject: {fileID: 0}
   - attachmentType: 3
     point: {fileID: 8294574330345904704}
     partMount: {fileID: 0}
     defaultAttachment: {fileID: 0}
-    currentAttachment: {fileID: 11400000, guid: 1ca1572e215f2d8498263a310ff94f7b,
-      type: 2}
-    defaultAttachmentObject: {fileID: 5704703023934008629}
+    currentAttachment: {fileID: 0}
+    defaultAttachmentObject: {fileID: 5996007234381309892}
     currentAttachmentObject: {fileID: 0}
   aimPoint: {fileID: 4969798714740822803}
   gripPoint: {fileID: 6300129460568843764}
@@ -599,6 +647,7 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 8362371826548187821}
+  - {fileID: 8495458428483629102}
   <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
   <NestedRootNetworkBehaviours>k__BackingField: []
   SerializedTransformProperties:

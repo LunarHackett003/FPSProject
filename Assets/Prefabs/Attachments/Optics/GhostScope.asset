@@ -21,4 +21,7 @@ MonoBehaviour:
   modifiedProperties:
   - name: maxDamageRange
     property: 10
+    amount: 1.2
+  - name: maxDamageRange
+    property: 9
     amount: 1.1

@@ -77,6 +77,8 @@ namespace Eclipse.Weapons.Attachments
                         default:
                             break;
                     }
+                    ServerManager.Spawn(item.currentAttachmentObject, Owner);
+
                 }
                 else
                 {
@@ -88,17 +90,16 @@ namespace Eclipse.Weapons.Attachments
                     if (item.attachmentType == AttachmentData.AttachmentType.optic)
                         aimPoint.localPosition = defaultAimPoint;
                 }
-                ServerManager.Spawn(item.currentAttachmentObject, Owner);
-                if (IsOwner)
+            }
+            if (IsOwner)
+            {
+                var renderers = GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
                 {
-                    var renderers = GetComponentsInChildren<Renderer>();
-                    for (int i = 0; i < renderers.Length; i++)
-                    {
-                        renderers[i].gameObject.layer = LayerMask.NameToLayer("Character");
-
-                    }
+                    renderers[i].gameObject.layer = LayerMask.NameToLayer("Character");
 
                 }
+
             }
         }
         override protected void OnValidate()

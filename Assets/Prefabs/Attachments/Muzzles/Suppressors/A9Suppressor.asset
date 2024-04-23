@@ -21,7 +21,10 @@ MonoBehaviour:
   modifiedProperties:
   - name: recoilSmoothness
     property: 6
-    amount: 1.02
+    amount: 1.2
   - name: recoilSmoothness
     property: 5
-    amount: 0.9
+    amount: 0.8
+  - name: recoilSmoothness
+    property: 4
+    amount: 0.7
