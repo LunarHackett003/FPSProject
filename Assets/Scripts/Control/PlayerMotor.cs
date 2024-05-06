@@ -18,12 +18,8 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] float lookAngle;
     [SerializeField] Vector2 lookSpeed;
     [SerializeField] bool freeLooking;
-    [SerializeField] Vector2 freeLookPosDeviance;
-    [SerializeField] float freeLookSpeed,freeLookSnapbackTime,freeLookMaxPosDeviance;
-    [SerializeField] internal Transform aimTransform, freeLookAimTarget;
-    Vector3 flAimTargStartPos;
-    //Helps to turn the head properly by adding forward offset to the aim target
-    [SerializeField] float freeLookMaxRearOffset;
+    [SerializeField] float aimPitchOffset;
+    [SerializeField] internal Transform aimTransform;
 
     [SerializeField] bool grounded;
     [SerializeField] float groundCheckDistance, groundCheckRadius;
@@ -37,7 +33,7 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField] Animator animator;
     [SerializeField] WeaponManager wm;
     [SerializeField] float jumpCooldown, jumpForce, verticalVelocityScalar;
-    [SerializeField] bool jumpBlocked, doubleJumped;
+    [SerializeField] bool jumpBlocked;
     [SerializeField] Vector3 jumpLinearViewPunch, jumpAngularViewPunch;
 
     [SerializeField] Renderer bodyRenderer;
@@ -59,17 +55,16 @@ public class PlayerMotor : NetworkBehaviour
     }
     private void Start()
     {
-        flAimTargStartPos = freeLookAimTarget.localPosition;
+
     }
     private void FixedUpdate()
     {
         if(IsOwner)
         Movement();
-
     }
-    private void LateUpdate()
+    private void Update()
     {
-        aimTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-lookAngle - wm.aimRotationDamped.x, -89, 89), wm.aimRotationDamped.y, wm.aimRotationDamped.z);
+        aimTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-lookAngle - wm.aimRotationDamped.x, -89, 89) + aimPitchOffset, wm.aimRotationDamped.y, wm.aimRotationDamped.z);
     }
     void Movement()
     {
@@ -95,7 +90,6 @@ public class PlayerMotor : NetworkBehaviour
         groundNormal = grounded ? hit.normal : transform.up;
         if (grounded)
         {
-            doubleJumped = false;
             //We've also just landed, check if we've just jumped
             if (!jumpBlocked && !oldGrounded)
             {
@@ -105,10 +99,8 @@ public class PlayerMotor : NetworkBehaviour
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && ((grounded && !jumpBlocked) || (!grounded && !doubleJumped)))
+        if (context.performed && ((grounded && !jumpBlocked)))
         {
-            if (!grounded)
-                doubleJumped = true;
             if (grounded)
                 netAnim.SetTrigger("Jump");
             netAnim.ResetTrigger("Landing");
@@ -118,11 +110,10 @@ public class PlayerMotor : NetworkBehaviour
     }
     public void LookInput(InputAction.CallbackContext context)
     {
-            Vector2 lookInput = context.ReadValue<Vector2>() * Time.smoothDeltaTime;
+            Vector2 lookInput = context.ReadValue<Vector2>() * Time.fixedDeltaTime;
             lookInput *= lookSpeed;
             lookAngle = Mathf.Clamp(lookAngle + lookInput.y, -85f, 85f);
             transform.Rotate(transform.up, lookInput.x);
-
     }
 
     IEnumerator JumpCD()

@@ -25,7 +25,7 @@ namespace Eclipse.Weapons
         [SerializeField] Vector3 forwardHandOriginalPosition;
         [SerializeField] Quaternion forwardHandOriginalRotation;
         float viewRoll;
-        [SerializeField] Transform recoilPositionTransform, recoilAngularTarget;
+        [SerializeField] Transform recoilPositionTransform;
         [SerializeField] Transform viewCamTarget, worldCamTarget;
         [SerializeField] float viewRecoilPosMultiplier, viewRecoilRotMultiplier, weaponRecoilPosMultiplier, weaponRecoilRotMultiplier;
         [SerializeField] Vector3 recoilpos, recoilRot;
@@ -33,7 +33,7 @@ namespace Eclipse.Weapons
         private float sds;
         [SerializeField] internal RecoilProfile recoilProfile;
         internal float recoilAngleAdditive;
-
+        public Quaternion recoilOrientation;
         [SerializeField] float recoilReturnTime;
         [SerializeField] float currentRecoilReturn;
         Vector3 peakRecoilPosition, recoilPositionDamped;
@@ -58,6 +58,7 @@ namespace Eclipse.Weapons
         public void SpawnWeapon()
         {
             GameObject weap = Instantiate(spawnWeapon.gameObject, parent: weaponRoot);
+            weap.name = spawnWeapon.name;
             Spawn(weap, Owner);
             currentWeapon = weap.GetComponent<Weapon>();
             currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -133,6 +134,7 @@ namespace Eclipse.Weapons
             if (currentWeapon)
             {
                 forwardHand.SetLocalPositionAndRotation(forwardHandOriginalPosition, forwardHandOriginalRotation);
+                if(animationHelper.forwardHandWeight > 0)
                 forwardHand.SetPositionAndRotation(Vector3.Lerp(forwardHand.position, currentWeapon.gripPoint.position, animationHelper.forwardHandWeight),
                     Quaternion.Lerp(forwardHand.rotation, currentWeapon.gripPoint.rotation, animationHelper.forwardHandWeight));
             }
@@ -151,7 +153,7 @@ namespace Eclipse.Weapons
         internal void ReceiveRecoilImpulse()
         {
             float aimLerp = Mathf.Lerp(1, currentWeapon.recoilProfile.aimedRecoilMultiplier, currentWeapon.aimAmount);
-            recoilpos += new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
+            recoilpos += recoilOrientation * new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
                 Random.Range(-recoilProfile.recoilPerShot.y, recoilProfile.recoilPerShot.y),
                 recoilProfile.recoilPerShot.z) * aimLerp;
             recoilReturnTime = 0;
