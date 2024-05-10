@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Eclipse.Weapons.Attachments;
 using FishNet;
-using Unity.VisualScripting;
-
+using UnityEngine.Animations;
 namespace Eclipse.Weapons
 {
     public class Weapon : NetworkBehaviour
@@ -99,11 +98,19 @@ namespace Eclipse.Weapons
         [SerializeField, Tooltip("This weapons Recoil Profile scriptable object")] internal RecoilProfile recoilProfile;
         [SerializeField, Tooltip("How strong the per-shot recoil is")] internal float recoilPerShot;
         [SerializeField] internal MobilityProfile mobilityProfile;
-
+        [System.Serializable]
+        public class Magazine
+        {
+            public Transform magazine;
+            public Vector3 startPos;
+            public Quaternion startRot;
+        }
+        public Magazine newMag, oldMag;
         private void Awake()
         {
             if(!attachmentManager)
                 attachmentManager = GetComponent<AttachmentManager>();
+
         }
         public override void OnStartClient()
         {
@@ -265,6 +272,17 @@ namespace Eclipse.Weapons
                     while (properties.Count > enumnames.Length -1)
                         properties.RemoveAt(properties.Count - 1);
                 }
+            }
+
+            if (newMag.magazine)
+            {
+                newMag.startPos = newMag.magazine.localPosition;
+                newMag.startRot = newMag.magazine.localRotation;
+            }
+            if (oldMag.magazine)
+            {
+                oldMag.startPos = oldMag.magazine.localPosition;
+                oldMag.startRot = oldMag.magazine.localRotation;
             }
         }
     }

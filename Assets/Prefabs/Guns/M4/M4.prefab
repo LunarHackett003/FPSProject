@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9141879934824814934}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!1 &779393860793511639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3935172508951534713}
+  m_Layer: 8
+  m_Name: MagazineRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3935172508951534713
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779393860793511639}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.00000029947333, y: -1.1102228e-16, z: -1.1102233e-16, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1708831463915765602}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3348496896272571775
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +154,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9141879934824814934}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4713961020104572738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6462848728187071474}
+  m_Layer: 8
+  m_Name: MagazineRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6462848728187071474
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713961020104572738}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4179901733176802198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5698437574646487744
 GameObject:
@@ -498,6 +560,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -7233097784852694372, guid: a7f6e529b7b83d047af89ea71fcbede1, type: 3}
+    - {fileID: -7769109627118537977, guid: a7f6e529b7b83d047af89ea71fcbede1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1048953910694265805, guid: a7f6e529b7b83d047af89ea71fcbede1,
         type: 3}
@@ -523,6 +586,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 425291530453360303}
+    - targetCorrespondingSourceObject: {fileID: 5355104457497223437, guid: a7f6e529b7b83d047af89ea71fcbede1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6462848728187071474}
+    - targetCorrespondingSourceObject: {fileID: -1736660530006530567, guid: a7f6e529b7b83d047af89ea71fcbede1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3935172508951534713}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a7f6e529b7b83d047af89ea71fcbede1,
         type: 3}
@@ -537,15 +608,15 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5309116053578448539}
   m_SourcePrefab: {fileID: 100100000, guid: a7f6e529b7b83d047af89ea71fcbede1, type: 3}
---- !u!1 &5704703023934008629 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4574518641493522350, guid: a7f6e529b7b83d047af89ea71fcbede1,
+--- !u!4 &1708831463915765602 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1736660530006530567, guid: a7f6e529b7b83d047af89ea71fcbede1,
     type: 3}
   m_PrefabInstance: {fileID: 8093207516830325403}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5996007234381309892 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6672432952648319649, guid: a7f6e529b7b83d047af89ea71fcbede1,
+--- !u!4 &4179901733176802198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5355104457497223437, guid: a7f6e529b7b83d047af89ea71fcbede1,
     type: 3}
   m_PrefabInstance: {fileID: 8093207516830325403}
   m_PrefabAsset: {fileID: 0}
@@ -631,6 +702,14 @@ MonoBehaviour:
   recoilProfile: {fileID: 11400000, guid: 4422c89cc1a8cc446a58e71234cd9b94, type: 2}
   recoilPerShot: 0.35
   mobilityProfile: {fileID: 11400000, guid: 904cbc002c8d65848a5563a9d82c7821, type: 2}
+  newMag:
+    magazine: {fileID: 1708831463915765602}
+    startPos: {x: 3.2804732e-17, y: -0.2928797, z: 0.5890766}
+    startRot: {x: -0.000000269671, y: 1.11022276e-16, z: 1.1102233e-16, w: 1}
+  oldMag:
+    magazine: {fileID: 4179901733176802198}
+    startPos: {x: 3.2804732e-17, y: -0.04287964, z: -0.16092344}
+    startRot: {x: -0.00000006741772, y: 1.1102229e-16, z: 1.1102229e-16, w: 1}
 --- !u!114 &8495458428483629102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,21 +726,14 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5309116053578448539}
   _networkObjectCache: {fileID: 5309116053578448539}
   attachPoints:
-  - attachmentType: 1
-    point: {fileID: 1865095818422626848}
-    partMount: {fileID: 3348496896272571775}
-    defaultAttachment: {fileID: 0}
-    currentAttachment: {fileID: 11400000, guid: 6aa345e4fa0a53d45b9f2a8a73313eed,
-      type: 2}
-    defaultAttachmentObject: {fileID: 5704703023934008629}
-    currentAttachmentObject: {fileID: 0}
-  - attachmentType: 3
-    point: {fileID: 8294574330345904704}
+  - attachmentType: 8
+    point: {fileID: 6462848728187071474}
+    magazinePoint: {fileID: 3935172508951534713}
     partMount: {fileID: 0}
     defaultAttachment: {fileID: 0}
-    currentAttachment: {fileID: 11400000, guid: 1ca1572e215f2d8498263a310ff94f7b,
+    currentAttachment: {fileID: 11400000, guid: 781a3b996c274974f816359d599f195a,
       type: 2}
-    defaultAttachmentObject: {fileID: 5996007234381309892}
+    defaultAttachmentObject: {fileID: 0}
     currentAttachmentObject: {fileID: 0}
   aimPoint: {fileID: 4969798714740822803}
   gripPoint: {fileID: 6300129460568843764}
@@ -680,7 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 1
+  <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 8362371826548187821}
@@ -697,7 +769,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 3
+  <PrefabId>k__BackingField: 13
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

@@ -16,7 +16,7 @@ namespace Eclipse.Weapons
         public Animator animator;
 
         public Transform weaponRoot;
-        public NetworkObject spawnWeapon;
+        public NetworkObject primaryWeapon, secondaryWeapon;
         public PlayerMotor pm;
         [SerializeField] Weapon currentWeapon;
         [SerializeField] Weapon stashedWeapon;
@@ -33,7 +33,9 @@ namespace Eclipse.Weapons
         private float sds;
         [SerializeField] internal RecoilProfile recoilProfile;
         internal float recoilAngleAdditive;
-        public Quaternion recoilOrientation;
+        public Quaternion viewRecoilOrientation = Quaternion.identity, aimedRecoilOrientation = Quaternion.identity;
+        public Quaternion WeaponRecoilOrientation = Quaternion.identity, aimedRecoilOrientationWeapon = Quaternion.identity;
+
         [SerializeField] float recoilReturnTime;
         [SerializeField] float currentRecoilReturn;
         Vector3 peakRecoilPosition, recoilPositionDamped;
@@ -43,6 +45,7 @@ namespace Eclipse.Weapons
         [SerializeField] bool aiming;
         [SerializeField] CinemachineCamera worldCamera, viewCamera;
         [SerializeField] float worldDefaultFOV = 70, viewDefaultFOV = 50;
+        public Weapon CurrentWeapon => currentWeapon;
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -52,13 +55,15 @@ namespace Eclipse.Weapons
         {
             base.OnStartClient();
             if (IsOwner)
+            {
                 SpawnWeapon();
+            }
         }
-        [ServerRpc(RunLocally = false)]
+        [ServerRpc(RunLocally = true)]
         public void SpawnWeapon()
         {
-            GameObject weap = Instantiate(spawnWeapon.gameObject, parent: weaponRoot);
-            weap.name = spawnWeapon.name;
+            GameObject weap = Instantiate(primaryWeapon.gameObject, parent: weaponRoot);
+            weap.name = primaryWeapon.name;
             Spawn(weap, Owner);
             currentWeapon = weap.GetComponent<Weapon>();
             currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -66,6 +71,17 @@ namespace Eclipse.Weapons
             {
                 item.gameObject.layer = LayerMask.NameToLayer("Character");
             }
+
+            weap = Instantiate(secondaryWeapon.gameObject, parent: weaponRoot);
+            weap.name = secondaryWeapon.name;
+            Spawn(weap, Owner);
+            stashedWeapon = weap.GetComponent<Weapon>();
+            stashedWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            foreach (var item in stashedWeapon.GetComponentsInChildren<Renderer>())
+            {
+                item.gameObject.layer = LayerMask.NameToLayer("Character");
+            }
+            weap.SetActive(false);
             
         }
         private void FixedUpdate()
@@ -80,16 +96,18 @@ namespace Eclipse.Weapons
             worldCamera.transform.rotation = worldCamTarget.rotation;
             viewCamera.transform.rotation = viewCamTarget.rotation;
         }
+        float aimLerp;
         void AimCameraCalculations()
         {
             if (currentWeapon && currentWeapon.aimPoint)
             {
 
                 currentWeapon.aimAmount = Mathf.MoveTowards(currentWeapon.aimAmount, aiming ? 1 : 0, currentWeapon.mobilityProfile.aimSpeed * Time.fixedDeltaTime);
-                float aimLerp = currentWeapon.mobilityProfile.aimCurve.Evaluate(currentWeapon.aimAmount);
+                aimLerp = currentWeapon.mobilityProfile.aimCurve.Evaluate(currentWeapon.aimAmount);
                 viewCamTarget.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position + (weaponRoot.TransformDirection(recoilPositionDamped) * viewRecoilPosMultiplier), aimLerp),
-                    Quaternion.Lerp(viewCamTarget.rotation, currentWeapon.aimPoint.rotation, currentWeapon.aimAmount) * Quaternion.Euler(recoilAimRotation * viewRecoilRotMultiplier));
+                viewCamTarget.SetPositionAndRotation(Vector3.Lerp(viewCamTarget.position, currentWeapon.aimPoint.position, aimLerp),
+                    viewCamTarget.rotation * Quaternion.Euler(recoilAimRotation * viewRecoilRotMultiplier));
+                viewCamTarget.localPosition += viewRecoilOrientation * recoilPositionDamped;
                 worldCamera.Lens.FieldOfView = Mathf.Lerp(worldDefaultFOV, currentWeapon.mobilityProfile.worldAimFOV, aimLerp);
                 viewCamera.Lens.FieldOfView = Mathf.Lerp(viewDefaultFOV, currentWeapon.mobilityProfile.viewAimFOV, aimLerp);
             }
@@ -121,14 +139,33 @@ namespace Eclipse.Weapons
                         recoilAimRotation = Vector3.LerpUnclamped(peakRecoilAimRotation, Vector3.zero, currentWeapon.recoilProfile.recoilViewReturnCurve.Evaluate(currentRecoilReturn));
                     }
                 }
-                recoilPositionDamped = Vector3.SmoothDamp(recoilPositionTransform.localPosition, recoilpos, ref posVelocity, currentWeapon.recoilProfile.weaponRecoilSmoothness) * weaponRecoilPosMultiplier;
+                recoilPositionDamped = Vector3.SmoothDamp(recoilPositionTransform.localPosition,  recoilpos * weaponRecoilPosMultiplier, ref posVelocity, currentWeapon.recoilProfile.weaponRecoilSmoothness);
                 aimRotationDamped = Vector3.SmoothDamp(aimRotationDamped, recoilAimRotation, ref aimRotationVelocity, currentWeapon.recoilProfile.viewRecoilSmoothness);
                 recoilPositionTransform.SetLocalPositionAndRotation(recoilPositionDamped,
                 Quaternion.Euler(aimRotationDamped * weaponRecoilRotMultiplier));
                 
             }
         }
+        public void SwitchWeapon()
+        {
+            if (IsOwner)
+            {
+                print("local weapon swap");
+                //Thank you intellisense, no clue i could do this actually
+                (stashedWeapon, currentWeapon) = (currentWeapon, stashedWeapon);
+                SwapWeaponRPC(currentWeapon, stashedWeapon);
+                stashedWeapon.gameObject.SetActive(false);
+                currentWeapon.gameObject.SetActive(true);
 
+                recoilProfile = currentWeapon.recoilProfile;
+            }
+        }
+        [ObserversRpc(RunLocally = false, ExcludeOwner = true)]
+        void SwapWeaponRPC(Weapon wNew, Weapon wOld)
+        {
+            print("networked weapon swap");
+            (stashedWeapon, currentWeapon) = (wOld, wNew);
+        }
         private void LateUpdate()
         {
             if (currentWeapon)
@@ -150,10 +187,17 @@ namespace Eclipse.Weapons
         {
             aiming = context.ReadValueAsButton();
         }
+        public void GetSwapInput(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                netAnimator.SetTrigger("Switch");
+            }
+        }
         internal void ReceiveRecoilImpulse()
         {
             float aimLerp = Mathf.Lerp(1, currentWeapon.recoilProfile.aimedRecoilMultiplier, currentWeapon.aimAmount);
-            recoilpos += recoilOrientation * new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
+            recoilpos += WeaponRecoilOrientation * new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
                 Random.Range(-recoilProfile.recoilPerShot.y, recoilProfile.recoilPerShot.y),
                 recoilProfile.recoilPerShot.z) * aimLerp;
             recoilReturnTime = 0;

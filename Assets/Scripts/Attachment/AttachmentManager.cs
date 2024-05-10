@@ -16,6 +16,7 @@ namespace Eclipse.Weapons.Attachments
             public AttachmentData.AttachmentType attachmentType;
             [Tooltip("Where this attachment, well, attaches :p")]
             public Transform point;
+            public Transform magazinePoint;
             [Tooltip("If the attachment requires a mount to be attached, it'll activate this.\nWhen removing a part, it'll check if any other attachments need this mount before deactivating it.")]
             public GameObject partMount;
             [Tooltip("The default attachment, equips this when no others are equipped.")]
@@ -47,15 +48,17 @@ namespace Eclipse.Weapons.Attachments
                         item.defaultAttachmentObject.SetActive(false);
                     //Instantiate the attachment prefab and assign it
                     item.currentAttachmentObject = Instantiate(item.currentAttachment.attachmentPrefab, item.point);
+                    print("attach placed - 0");
                     //Set the position and rotation to its offset
                     item.currentAttachmentObject.transform.SetLocalPositionAndRotation(item.currentAttachment.posOffset, Quaternion.Euler(item.currentAttachment.eulerOffset));
+                    print("attach positioned - 1");
                     //If it needs a mount, add the mount
                     if (item.currentAttachment.requiresMount)
                     {
                         item.partMount.SetActive(true);
                         requiredMounts.Add(item.partMount.transform);
                     }
-
+                    print("Checking attach type - 2");
                     switch (item.attachmentType)
                     {
                         case AttachmentData.AttachmentType.none:
@@ -73,6 +76,16 @@ namespace Eclipse.Weapons.Attachments
                                 weapon.muzzleParticle = ps;
                             break;
                         case AttachmentData.AttachmentType.laser:
+                            break;
+                        case AttachmentData.AttachmentType.magazine:
+                            if (item.magazinePoint)
+                            {
+                                print("trying to duplicate magazine");
+                                var secondmag = Instantiate(item.currentAttachmentObject, item.magazinePoint);
+                                secondmag.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                                ServerManager.Spawn(secondmag, Owner);
+                                print("dupe successful");
+                            }
                             break;
                         default:
                             break;

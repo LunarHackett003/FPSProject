@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b917fbc8812e741ab229b4236f32f9, type: 3}
+  m_Name: 556_30_Mag
+  m_EditorClassIdentifier: 
+  requiresMount: 0
+  attachmentType: 8
+  attachmentPrefab: {fileID: 3978478181975985220, guid: 0f954c575378f154a8e9043c32b34c24,
+    type: 3}
+  posOffset: {x: 0, y: 0, z: 0}
+  eulerOffset: {x: 0, y: 0, z: 0}
+  modifiedProperties:
+  - name: reloadSpeed
+    property: 1
+    amount: 1

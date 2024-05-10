@@ -93,6 +93,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   aimedRecoilMultiplier: 0.75
-  aimRotationPerShot: {x: 0.8, y: 0.4, z: 1}
+  aimRotationPerShot: {x: 0.4, y: 0.2, z: 0.2}
   weaponRecoilSmoothness: 0.02
   viewRecoilSmoothness: 0.04
