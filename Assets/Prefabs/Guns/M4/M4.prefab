@@ -607,6 +607,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5309116053578448539}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a7f6e529b7b83d047af89ea71fcbede1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2151138477586523528}
   m_SourcePrefab: {fileID: 100100000, guid: a7f6e529b7b83d047af89ea71fcbede1, type: 3}
 --- !u!4 &1708831463915765602 stripped
 Transform:
@@ -641,6 +645,10 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 5309116053578448539}
   _networkObjectCache: {fileID: 5309116053578448539}
+  firePosition: {fileID: 366514873886462220}
+  shotEffect: {fileID: 7745328033304195952, guid: 750f16fcc6081834f83b21e4a9e99d8d,
+    type: 3}
+  tracerSpeed: 100
   properties:
   - name: reloadSpeed
     property: 1
@@ -672,6 +680,7 @@ MonoBehaviour:
   - name: maxDamageRange
     property: 10
     amount: 1
+  animations: {fileID: 11400000, guid: 78f4f1995e03d1a45acb7124da773412, type: 2}
   attachmentManager: {fileID: 8495458428483629102}
   aimPoint: {fileID: 4969798714740822803}
   gripPoint: {fileID: 6300129460568843764}
@@ -699,9 +708,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  bulletLayermask:
+    serializedVersion: 2
+    m_Bits: 1
+  maxRange: 400
   recoilProfile: {fileID: 11400000, guid: 4422c89cc1a8cc446a58e71234cd9b94, type: 2}
   recoilPerShot: 0.35
   mobilityProfile: {fileID: 11400000, guid: 904cbc002c8d65848a5563a9d82c7821, type: 2}
+  fireIterations: 1
   newMag:
     magazine: {fileID: 1708831463915765602}
     startPos: {x: 3.2804732e-17, y: -0.2928797, z: 0.5890766}
@@ -769,11 +783,28 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 13
+  <PrefabId>k__BackingField: 12
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 14310358519504923083
+--- !u!114 &2151138477586523528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976149642202605514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b597e1828355a4d994a69cbb11ef85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 5309116053578448539}
+  _networkObjectCache: {fileID: 0}
+  _allowSpawning: 1
+  _allowDespawning: 1
 --- !u!4 &9141879934824814934 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1048953910694265805, guid: a7f6e529b7b83d047af89ea71fcbede1,

@@ -14,7 +14,14 @@ namespace Eclipse.Weapons
         public float aimedRecoilMultiplier;
         public Vector3 aimRotationPerShot;
         public float weaponRecoilSmoothness, viewRecoilSmoothness;
-
+        public Vector3 minHipSpread, maxHipSpread;
+        /// <summary>
+        /// The constant spread bounds, always applied when firing. <br></br>
+        /// The maximum distance a bullet will spread over the range of the weapon.
+        /// </summary>
+        public Vector3 minConstantSpread, maxConstantSpread;
+        public float hipSpreadPerShot, hipSpreadDecaySpeed;
+        public AnimationCurve spreadCurve;
         public RecoilProfile()
         {
         }
@@ -32,6 +39,12 @@ namespace Eclipse.Weapons
             aimRotationPerShot = profile.aimRotationPerShot;
             weaponRecoilSmoothness = profile.weaponRecoilSmoothness;
             viewRecoilSmoothness = profile.viewRecoilSmoothness;
+            minHipSpread = profile.minHipSpread;
+            maxHipSpread = profile.maxHipSpread;
+            minConstantSpread = profile.minConstantSpread;
+            maxConstantSpread = profile.maxConstantSpread;
+            hipSpreadPerShot = profile.hipSpreadPerShot;
+            hipSpreadDecaySpeed = profile.hipSpreadDecaySpeed;
         }
         
 

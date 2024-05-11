@@ -46,25 +46,25 @@ namespace Eclipse.Weapons
         [SerializeField] CinemachineCamera worldCamera, viewCamera;
         [SerializeField] float worldDefaultFOV = 70, viewDefaultFOV = 50;
         public Weapon CurrentWeapon => currentWeapon;
-        private void Awake()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        [SerializeField] internal Transform fireOrigin;
+
+        AnimatorOverrideController aoc;
+        AnimationClipOverrides overrides;
+
         public override void OnStartClient()
         {
             base.OnStartClient();
-            if (IsOwner)
-            {
+            print($"{Owner.IsHost} : {Owner.IsLocalClient}");
+            if (Owner.IsLocalClient || Owner.IsHost)
                 SpawnWeapon();
-            }
+
         }
-        [ServerRpc(RunLocally = true)]
+
+        [ServerRpc]
         public void SpawnWeapon()
         {
             GameObject weap = Instantiate(primaryWeapon.gameObject, parent: weaponRoot);
             weap.name = primaryWeapon.name;
-            Spawn(weap, Owner);
             currentWeapon = weap.GetComponent<Weapon>();
             currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             foreach (var item in currentWeapon.GetComponentsInChildren<Renderer>())
@@ -74,7 +74,6 @@ namespace Eclipse.Weapons
 
             weap = Instantiate(secondaryWeapon.gameObject, parent: weaponRoot);
             weap.name = secondaryWeapon.name;
-            Spawn(weap, Owner);
             stashedWeapon = weap.GetComponent<Weapon>();
             stashedWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             foreach (var item in stashedWeapon.GetComponentsInChildren<Renderer>())
@@ -82,8 +81,21 @@ namespace Eclipse.Weapons
                 item.gameObject.layer = LayerMask.NameToLayer("Character");
             }
             weap.SetActive(false);
-            
+            ServerManager.Spawn(currentWeapon.gameObject, Owner);
+            ServerManager.Spawn(stashedWeapon.gameObject, Owner);
+            SetWeaponPosition(currentWeapon.NetworkObject, stashedWeapon.NetworkObject);
         }
+        [ObserversRpc]
+        void SetWeaponPosition(NetworkObject c, NetworkObject s)
+        {
+            c.gameObject.SetActive(true);
+            s.gameObject.SetActive(true);
+            currentWeapon = c.GetComponent<Weapon>();
+            stashedWeapon = s.GetComponent<Weapon>();
+
+
+        }
+
         private void FixedUpdate()
         {
             //Recoil needs to be visible for all players
@@ -150,21 +162,42 @@ namespace Eclipse.Weapons
         {
             if (IsOwner)
             {
-                print("local weapon swap");
-                //Thank you intellisense, no clue i could do this actually
-                (stashedWeapon, currentWeapon) = (currentWeapon, stashedWeapon);
                 SwapWeaponRPC(currentWeapon, stashedWeapon);
-                stashedWeapon.gameObject.SetActive(false);
-                currentWeapon.gameObject.SetActive(true);
-
-                recoilProfile = currentWeapon.recoilProfile;
             }
         }
-        [ObserversRpc(RunLocally = false, ExcludeOwner = true)]
+        [ObserversRpc()]
         void SwapWeaponRPC(Weapon wNew, Weapon wOld)
         {
             print("networked weapon swap");
-            (stashedWeapon, currentWeapon) = (wOld, wNew);
+            (stashedWeapon, currentWeapon) = (wNew, wOld);
+            stashedWeapon.gameObject.SetActive(false);
+            currentWeapon.gameObject.SetActive(true);
+
+            SwapAnimations();
+            recoilProfile = currentWeapon.recoilProfile;
+        }
+
+        public void SwapAnimations()
+        {
+            //Create the override controller
+            if (!aoc)
+            {
+                aoc = new(animator.runtimeAnimatorController);
+                //assign the override controller
+                animator.runtimeAnimatorController = aoc;
+                overrides = new(aoc.overridesCount);
+                aoc.GetOverrides(overrides);
+            }
+            if (currentWeapon.animations)
+            {
+                for (int i = 0; i < currentWeapon.animations.overrides.Count; i++)
+                {
+                    AnimationOverrides a = currentWeapon.animations.overrides[i];
+                    overrides[a.name] = a.overrideClip;
+                }
+                aoc.ApplyOverrides(overrides);
+            }
+            netAnimator.SetController(aoc);
         }
         private void LateUpdate()
         {
@@ -196,10 +229,12 @@ namespace Eclipse.Weapons
         }
         internal void ReceiveRecoilImpulse()
         {
+            if (!currentWeapon)
+                return;
             float aimLerp = Mathf.Lerp(1, currentWeapon.recoilProfile.aimedRecoilMultiplier, currentWeapon.aimAmount);
-            recoilpos += WeaponRecoilOrientation * new Vector3(Random.Range(-recoilProfile.recoilPerShot.x, recoilProfile.recoilPerShot.x),
-                Random.Range(-recoilProfile.recoilPerShot.y, recoilProfile.recoilPerShot.y),
-                recoilProfile.recoilPerShot.z) * aimLerp;
+            recoilpos += WeaponRecoilOrientation * new Vector3(Random.Range(-currentWeapon.recoilProfile.recoilPerShot.x, currentWeapon.recoilProfile.recoilPerShot.x),
+                Random.Range(-currentWeapon.recoilProfile.recoilPerShot.y, currentWeapon.recoilProfile.recoilPerShot.y),
+                currentWeapon.recoilProfile.recoilPerShot.z) * aimLerp;
             recoilReturnTime = 0;
             recoilAimRotation += new Vector3()
             {
@@ -207,6 +242,7 @@ namespace Eclipse.Weapons
                 y = Random.Range(-currentWeapon.recoilProfile.aimRotationPerShot.y, currentWeapon.recoilProfile.aimRotationPerShot.y),
                 z = Random.Range(-currentWeapon.recoilProfile.aimRotationPerShot.z, currentWeapon.recoilProfile.aimRotationPerShot.z),
             } * aimLerp;
+            netAnimator.SetTrigger("Fire");
         }
     }
 }

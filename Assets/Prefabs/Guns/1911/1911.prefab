@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 133667182804142731}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MuzzlePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 4502725727423233737}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000011920929, y: -1, z: 0.0000005960465, w: 1.4210856e-13}
-  m_LocalPosition: {x: -0, y: 0.0721, z: -0.2408}
+  m_LocalPosition: {x: 0, y: 0.0532, z: -0.1855}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2973366671842075765}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GripPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1248978624465750403}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AimPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 8196763021901870515}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.086, z: 0.1298}
+  m_LocalPosition: {x: -0, y: 0.0657, z: 0.1298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114,12 +114,12 @@ PrefabInstance:
     - target: {fileID: 8117199811315242966, guid: 3301507520c0de64d98ef65c6ae5e4f2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.061
+      value: 0.0519
       objectReference: {fileID: 0}
     - target: {fileID: 8117199811315242966, guid: 3301507520c0de64d98ef65c6ae5e4f2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.246
+      value: -0.1788
       objectReference: {fileID: 0}
     - target: {fileID: 8117199811315242966, guid: 3301507520c0de64d98ef65c6ae5e4f2,
         type: 3}
@@ -231,10 +231,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -5787325080465316919, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -4714817154256824709, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -948639998905544997, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -505113825378409777, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 678251615726133740, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a9c36111c2b4f1040b07a4112ab8dd21,
         type: 3}
       propertyPath: m_Name
       value: 1911
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1321698360760406216, guid: a9c36111c2b4f1040b07a4112ab8dd21,
         type: 3}
@@ -265,6 +300,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1822978858531378648, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5412003566614263259, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905609870639353253, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036213049465896255, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574092336206412074, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8879528566716807029, guid: a9c36111c2b4f1040b07a4112ab8dd21,
         type: 3}
@@ -335,6 +395,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3044280376873000454}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a9c36111c2b4f1040b07a4112ab8dd21,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7582198810899292343}
   m_SourcePrefab: {fileID: 100100000, guid: a9c36111c2b4f1040b07a4112ab8dd21, type: 3}
 --- !u!4 &2083674054025156046 stripped
 Transform:
@@ -369,6 +433,10 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 4816934979811651952}
   _networkObjectCache: {fileID: 4816934979811651952}
+  firePosition: {fileID: 5775113385305758742}
+  shotEffect: {fileID: 7745328033304195952, guid: 750f16fcc6081834f83b21e4a9e99d8d,
+    type: 3}
+  tracerSpeed: 100
   properties:
   - name: reloadSpeed
     property: 1
@@ -400,6 +468,7 @@ MonoBehaviour:
   - name: maxDamageRange
     property: 10
     amount: 1
+  animations: {fileID: 11400000, guid: 9b07c63775dc56b4587f8fe96d70ca4c, type: 2}
   attachmentManager: {fileID: 0}
   aimPoint: {fileID: 1248978624465750403}
   gripPoint: {fileID: 2973366671842075765}
@@ -427,16 +496,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  bulletLayermask:
+    serializedVersion: 2
+    m_Bits: 1
+  maxRange: 300
   recoilProfile: {fileID: 11400000, guid: 7d36e81b886cb7a4893bbe62674e5379, type: 2}
   recoilPerShot: 0
   mobilityProfile: {fileID: 11400000, guid: 98102752581533d4a9594e834b92261d, type: 2}
+  fireIterations: 1
   newMag:
     magazine: {fileID: 5576100307386895126}
-    startPos: {x: -1.4091829e-17, y: -0.063463956, z: 0.016359597}
+    startPos: {x: -1.23303504e-17, y: -0.05553096, z: 0.014314648}
     startRot: {x: -0.15502645, y: -0.000000117768096, z: 0.000000018480593, w: 0.98791033}
   oldMag:
     magazine: {fileID: 4773219046554749881}
-    startPos: {x: -1.4091829e-17, y: -0.22346395, z: 0.4963596}
+    startPos: {x: -1.23303504e-17, y: -0.19553097, z: 0.43431464}
     startRot: {x: -0.15502645, y: -0.000000117768096, z: 0.000000018480593, w: 0.98791033}
 --- !u!114 &4816934979811651952
 MonoBehaviour:
@@ -468,7 +542,7 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 18
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -493,6 +567,23 @@ MonoBehaviour:
   gripPoint: {fileID: 2973366671842075765}
   weapon: {fileID: 3392729509919598174}
   defaultAimPoint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7582198810899292343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5437469550199225478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b597e1828355a4d994a69cbb11ef85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 4816934979811651952}
+  _networkObjectCache: {fileID: 0}
+  _allowSpawning: 1
+  _allowDespawning: 1
 --- !u!4 &5576100307386895126 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8442307832336643391, guid: a9c36111c2b4f1040b07a4112ab8dd21,

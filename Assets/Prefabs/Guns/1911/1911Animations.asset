@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e6a79da669b024089aeae6620dc101, type: 3}
+  m_Name: 1911Animations
+  m_EditorClassIdentifier: 
+  overrides:
+  - name: Equip
+    overrideClip: {fileID: 7400000, guid: 6a7c232cd644a08429e6fc040f071ea3, type: 2}
+  - name: Idle
+    overrideClip: {fileID: 7400000, guid: 0df279c0778f3f94687f6b90ad8a2443, type: 2}
+  - name: ReloadTactical
+    overrideClip: {fileID: 7400000, guid: 25c49d027341cdd4abc1af18a08dc580, type: 2}
+  - name: Fire
+    overrideClip: {fileID: 7400000, guid: 4ed73f2b1b4a1f64cb54ed393fb36953, type: 2}
+  - name: Unequip
+    overrideClip: {fileID: 7400000, guid: 1e0c6f6f8fc1c8147a7279e424e27ddf, type: 2}

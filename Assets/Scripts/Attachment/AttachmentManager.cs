@@ -83,15 +83,12 @@ namespace Eclipse.Weapons.Attachments
                                 print("trying to duplicate magazine");
                                 var secondmag = Instantiate(item.currentAttachmentObject, item.magazinePoint);
                                 secondmag.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                                ServerManager.Spawn(secondmag, Owner);
                                 print("dupe successful");
                             }
                             break;
                         default:
                             break;
                     }
-                    ServerManager.Spawn(item.currentAttachmentObject, Owner);
-
                 }
                 else
                 {
